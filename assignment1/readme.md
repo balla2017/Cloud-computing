@@ -6,12 +6,12 @@ StudentInformationSystem
 - Every Course will have a roster 
 - Every Course has enrolled Students
 - Every Course has one associated Professor, and a Student TA
- - Every Student has information in the system 
-          - Name        
-          - StudentId
-          - image     
-          - courses enrolled
-          - program name
+- Every Student has information in the system 
+- Name        
+- StudentId
+- image     
+- courses enrolled
+- program name
 ELB URL link: Studentinformationadminsystem-env.yjmypmnyth.us-east-2.elasticbeanstalk.com
 You can use like this:
 URL: 
