@@ -1,12 +1,12 @@
 StudentInformationSystem 
-     - The system manages Professors, Students and Programs.
-     - Every Program has Courses
-     - Every Course has Lectures, and each lecture will have notes, and associated material
-     - Every Course will have a board
-     - Every Course will have a roster 
-     - Every Course has enrolled Students
-     - Every Course has one associated Professor, and a Student TA
-     - Every Student has information in the system 
+- The system manages Professors, Students and Programs.
+- Every Program has Courses
+- Every Course has Lectures, and each lecture will have notes, and associated material
+- Every Course will have a board
+- Every Course will have a roster 
+- Every Course has enrolled Students
+- Every Course has one associated Professor, and a Student TA
+ - Every Student has information in the system 
           - Name        
           - StudentId
           - image     
