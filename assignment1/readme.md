@@ -15,9 +15,11 @@ StudentInformationSystem
 ELB URL link: Studentinformationadminsystem-env.yjmypmnyth.us-east-2.elasticbeanstalk.com
 -You can use like this:
 URL: 
--/webapi/classes/(courseID, e.g.: csye6225, info6205,cs5600)/students
--/webapi/classes/(courseID, e.g.: csye6225, info6205,cs5600)/lectures
--/webapi/classes/(courseID, e.g.: csye6225, info6205,cs5600)/professor
+./webapi/classes/(courseID, e.g.: csye6225, info6205,cs5600)/students
+
+./webapi/classes/(courseID, e.g.: csye6225, info6205,cs5600)/lectures
+
+./webapi/classes/(courseID, e.g.: csye6225, info6205,cs5600)/professor
 
 ./webapi/classes/(courseID, e.g.: csye6225, info6205,cs5600)/studentTA
 
@@ -28,5 +30,7 @@ URL:
 ./webapi/programs/id(e.g.666)/students
 
 ./webapi/programs/id(e.g.666)/courses
+
 ./webapi/students/id(e.g.10001-10006)/courses
+
 to find information you want to query.
