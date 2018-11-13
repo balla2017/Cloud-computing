@@ -9,7 +9,7 @@ get:
 …/webapi/courses/{coursesID}, e.g.: /webapi/courses/0001
 
 delete:
-…/webapi/courses/{coursesID},e.g.: //webapi/courses/0002
+…/webapi/courses/{coursesID},e.g.: /webapi/courses/0002
 
 post:
 …/webapi/courses/
