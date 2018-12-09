@@ -93,21 +93,21 @@ public class CourseService
 	// Updating course Info
 	public Course updateCourseInformation(String courseId, Course course) {	
 			List<Course> list = getCourseFromDDB(courseId);
-			Course oldCourse = null;
+			Course pre = null;
 			if(list.size() != 0) {
-				oldCourse = list.get(0);
-				oldCourse.setBoardId(course.getBoardId());
-				oldCourse.setDepartment(course.getDepartment());
-				oldCourse.setProfessorId(course.getProfessorId());
-				oldCourse.setTaId(course.getTaId());
-				oldCourse.setlistOfRegisteredStudents(course.getlistOfRegisteredStudents());
-				oldCourse.setNotificationTopic(course.getNotificationTopic());
+				pre = list.get(0);
+				pre.setBoardId(course.getBoardId());
+				pre.setDepartment(course.getDepartment());
+				pre.setProfessorId(course.getProfessorId());
+				pre.setTaId(course.getTaId());
+				pre.setlistOfRegisteredStudents(course.getlistOfRegisteredStudents());
+				pre.setNotificationTopic(course.getNotificationTopic());
 
 				mapper.save(oldCourse);
 				System.out.println("updated:");
-			    System.out.println(oldCourse.toString());
+			    System.out.println(pre.toString());
 			}		
-			return oldCourse;
+			return pre;
 		}
 	
 		
