@@ -115,7 +115,7 @@ public class StudentService
 				}
 			}
 			
-			return stu;
+			return s;
 		}
 	 
 		public List<Student> getStudentFromDDB(String stuId)
