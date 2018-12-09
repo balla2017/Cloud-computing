@@ -57,6 +57,8 @@ body:
 then you will get an email if you registered successfully, please confirm that then you can receive notification for new announcement.
 
 post new announcement:
+url
+.../webapi/announcements/
 body:
 {
 	"boardId":"007”,
