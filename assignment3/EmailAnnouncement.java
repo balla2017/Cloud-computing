@@ -14,6 +14,18 @@ import com.csye6225.fall2018.courseservice667.service.CourseService;
 public class EmailAnnouncement implements RequestHandler<DynamodbEvent, String> {
     private static AmazonSNS client = AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_2).build();
 	
+	public void sendNotificationByEmail(String topicArn, final String message, final String subject) {
+		PublishRequest publishRequest = new PublishRequest(topicArn, message, subject);
+		client.publish(publishRequest);
+	}
+	
+	private String getTopicArnByBoardId(String boardId) {
+		CourseService courseService = new CourseService();
+		BoardService boardService = new BoardService();
+		String courseId = boardService.getBoardFromDDB(boardId).get(0).getCourseId();
+		return courseService.getCourseFromDDB(courseId).get(0).getNotificationTopic();
+	}
+	
 	@Override
 	public String handleRequest(DynamodbEvent ddbEvent, Context context) {	
 		context.getLogger().log("Event: " + ddbEvent);
@@ -30,27 +42,8 @@ public class EmailAnnouncement implements RequestHandler<DynamodbEvent, String> 
 				sendNotificationByEmail(topic, message, "There is a new announcement!");         
 	        }
 		}
-	    return ddbEvent.toString();
-			
+	    return ddbEvent.toString();			
 	}
 	
-	/*public static String createTopic(String topicName) {
-		return client.createTopic(topicName).getTopicArn();
-	}
 	
-	public static void subscribe(String topicArn, String email) {
-		client.subscribe(topicArn, "email", email);		
-	}*/
-	
-	public void sendNotificationByEmail(String topicArn, final String message, final String subject) {
-		PublishRequest publishRequest = new PublishRequest(topicArn, message, subject);
-		client.publish(publishRequest);
-	}
-	
-	private String getTopicArnByBoardId(String boardId) {
-		CourseService courseService = new CourseService();
-		BoardService boardService = new BoardService();
-		String courseId = boardService.getBoardFromDDB(boardId).get(0).getCourseId();
-		return courseService.getCourseFromDDB(courseId).get(0).getNotificationTopic();
-	}
 }
