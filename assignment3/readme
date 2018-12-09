@@ -1,1 +1,67 @@
+URL:
+Studentinformationadminsystem-env.yjmypmnyth.us-east-2.elasticbeanstalk.com
+github:
 
+Instructions:
+Other operations about get, post, put, delete is the same as
+https://github.com/balla2017/Cloud-computing/blob/master/assignment2/courseservice667/src/readme.txt
+other files can be found:
+https://github.com/balla2017/Cloud-computing/tree/master/assignment2/courseservice667/src/main/java/com/csye6225/fall2018/courseservice667
+
+New operations:
+post:
+students:
+...webapi/students/
+body:
+{
+  "courses":[],
+  "department":"csye",
+  "emailID":"testemail",
+  "firstName":"Apple",
+  "lastName":"Orange",
+  "studentId":"666",
+  "joingDate":"2008/08/08"
+}
+
+courses:
+{
+"boradId": "007",
+"courseId": "007",
+"department": "info",
+"professorId": "apple",
+"listOfRegisteredStudents”:[],
+"studentTaId": "apple2"
+}
+
+student wants to register:
+firstly get all information about the course you want to register:
+get:
+..webapi/courses/all
+..webapi/courses/{courseId}, e.g.webapi/courses/007
+write down all information you need for register, especially notificationTopic
+then post
+url:
+..webapi/students/{studentId}/register, e.g...webapi/students/11/register
+body:
+{
+	"notificationTopic":"arn:aws:sns:us-east-2:267886740618:coursenull",
+	"boardId":"007",
+	"courseId":"007",
+	"department":"info",
+	"id":"475de8b3-1773-489a-93a0-c789630d7ce8",
+	"professorId":"apple",
+	"taId":"apple2",
+	"listOfRegisteredStudents":[]
+}
+then you will get an email if you registered successfully, please confirm that then you can receive notification for new announcement.
+
+post new announcement:
+body:
+{
+	"boardId":"007”,
+	"announcementId":"280",
+	"announcementText":"class is over now."
+}
+
+
+then all students registered the course whose boardId equals 007 will get an announcement.
