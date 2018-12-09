@@ -45,25 +45,24 @@ public class CourseService
 	// Adding a course
 	public Course addCourse(Course course) {
 		String topic=registerNotificationSNS.createTopic("course"+course.getId());
-	    Course course2 = new Course();
-	    course2.setCourseId(course.getCourseId());
-	    course2.setBoardId(course.getBoardId());
-	    course2.setDepartment(course.getDepartment());
-	    course2.setProfessorId(course.getProfessorId());
-	    course2.setTaId(course.getTaId());
-	    course2.setlistOfRegisteredStudents(course.getlistOfRegisteredStudents());
-	    course2.setNotificationTopic(topic);
-		mapper.save(course2);
+	    Course c2 = new Course();
+	    c2.setCourseId(course.getCourseId());
+	    c2.setBoardId(course.getBoardId());
+	    c2.setDepartment(course.getDepartment());
+	    c2.setProfessorId(course.getProfessorId());
+	    c2.setTaId(course.getTaId());
+	    c2.setlistOfRegisteredStudents(course.getlistOfRegisteredStudents());
+	    c2.setNotificationTopic(topic);
+		mapper.save(c2);
 		
 		//add board to database
-		Board b=new Board(course2.getId(),course2.getBoardId(),course2.getCourseId());
+		Board b=new Board(c2.getId(),2.getBoardId(),c2.getCourseId());
 		BoardService bs=new BoardService();
 		bs.addBoard(b);
 			
-		System.out.println("Board added:");
-		System.out.println(course2.toString());
+		System.out.println("Added successfully!");
 		    
-		return course2;
+		return c2;
    }
 	
 	// Getting One course
@@ -75,19 +74,18 @@ public class CourseService
 	// Deleting a course
 	public Course deleteCourse(String courseId) {
 		List<Course> list = getCourseFromDDB(courseId);
-		Course cour = null;
+		Course c = null;
 		if(list.size() != 0){
-			cour = list.get(0);
-			mapper.delete(cour);
-			Course deletedCourse = mapper.load(Course.class, cour.getId());
+			c = list.get(0);
+			mapper.delete(c);
+			Course deletedCourse = mapper.load(Course.class, c.getId());
 				
 			if (deletedCourse == null) {
 		        System.out.println("deleted.");
-		        System.out.println(cour.toString());
 		    }
 		}
 			
-	 return cour;
+	 return c;
 	}
 		
 	// Updating course Info
