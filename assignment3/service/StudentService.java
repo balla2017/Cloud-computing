@@ -16,7 +16,6 @@ import com.csye6225.fall2018.courseservice667.datamodel.Student;
 
 public class StudentService 
 {
-	private static AmazonSNS registerHelper = AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_2).build();
 	static DynamoDBConnector dynamoDb;
 	DynamoDBMapper mapper; 
 	
@@ -64,19 +63,18 @@ public class StudentService
 		// Deleting a student
 		public Student deleteStudent(String studentId) {
 			List<Student> list = getStudentFromDDB(studentId);
-			Student stu = null;
+			Student s = null;
 			if(list.size() != 0){
-				stu = list.get(0);
-				mapper.delete(stu);
-				Student deletedStu = mapper.load(Student.class, stu.getId());
+				s = list.get(0);
+				mapper.delete(s);
+				Student deleted = mapper.load(Student.class, s.getId());
 				
-				if (deletedStu == null) {
-		            System.out.println("Student is deleted.");
+				if (deleted == null) {
 		            System.out.println(stu.toString());
 		        }
 			}
 			
-			return stu;
+			return s;
 		}
 		
 		// Updating Student Info
@@ -100,20 +98,20 @@ public class StudentService
 		// register for a course 
 		public Student registerCourse(String studentId, Course course){
 			List<Student> list = getStudentFromDDB(studentId);
-			CourseService courseSer = new CourseService();
-			Student stu = null;
+			CourseService c = new CourseService();
+			Student s = null;
 			if(list.size() != 0) {
-				stu = list.get(0);
+				s = list.get(0);
 				
-				if(stu.getCourseIds().size() < 3) {
-					stu.getCourseIds().add(course.getCourseId());
+				if(s.getCourseIds().size() < 3) {
+					s.getCourseIds().add(course.getCourseId());
 					course.getlistOfRegisteredStudents().add(studentId);
 					
 					// update information in database
-					updateStudentInformation(studentId,stu);
-					courseSer.updateCourseInformation(course.getCourseId(), course);
+					updateStudentInformation(studentId,s);
+					c.updateCourseInformation(course.getCourseId(), course);
 					
-					registerNotificationSNS.subscribe(course.getNotificationTopic(), stu.getEmailID());
+					registerNotificationSNS.subscribe(course.getNotificationTopic(), s.getEmailID());
 				}
 			}
 			
