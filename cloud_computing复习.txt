@@ -1,0 +1,236 @@
+caching(storing reusable responses in order to make subsequent requests faster):
+web caching: caching http requests
+-advantage:
+• Decreased network costs
+• Improved responsiveness
+• Increased performance on the same hardware
+• Availability of content during network interruptions
+
+cache hit retio:
+(requests can be retrieved from cache)/(total requests made)
+
+Freshness : describe whether an item within a cache is still considered a candidate to serve to a client
+
+stale content: expired content
+
+what can be cached:
+-content change infrequently.
+-logos & brand images
+-style sheets
+-general js files
+-downloadable content
+-media files
+
+never be cached:
+• Assets related to sensitive data (banking info, etc.)
+• Content that is user-specific and frequently change
+
+where web content is cached:
+-browser cache
+-intermediary caching proxies(caches may be maintained by ISPs)
+-reverse cache:point of contact
+
+memcache/ReDiS(remote dictionary server)
+-fast in-memory cache distributed db
+-next common only to Linux
+-be implemented both app server or on the same server
+-simple key-values store
+-set,get,delete, every API call is a network call
+-NoSQL db
+
+cloud storage
+benefits:
+-make the company more agile, and reduces total ownership cost
+-reduces time to deployment
+-provides global scale as companies can quickly go international.
+
+types of cloud storage:
+object,file, block
+
+Object store use cases:
+-backup&recovery
+-data archiving&compliance(government or banks)
+-big data analysis(AmazonS3, data store)
+-hybrid cloud storage
+-cloud-native application data
+-disaster recovery
+
+file storage
+solution: Amazon Elastic file system(EFS)
+Network Attached Storage(NAS) server
+• - have their own operating systems
+• - Typically used for performing nightly backups
+• - access your data from anywhere and concurrently 
+• - Today they are popular as the “Personal Cloud”
+• - Example, Commercial NAS - Apple AirPort.
+
+use cases:
+• - CMS (Content Management Systems) 
+• - Big data analytics
+• - Media processing workflows
+• - Media and Entertainment
+• - Home Directories
+
+block storage(low latency storage for each host):
+solutions like Amazon Elastic Block Store (EBS) are provisioned with each virtual server.
+• - Latency typical determines what you need
+• - This is like adding a additional storage mechanism to your Cloud host.
+
+message queues:
+why queues?
+-decoupling
+-async processing
+-integration
+-fault tolerace
+-spikability
+-event-sourcing friend
+-distribute load
+-integrate various components
+
+use cases:
+-gathering statistic
+-sending emails
+-push
+-load balancing workers
+-system integration
+
+types:
+-message queues brokers
+-distributed/brokerless
+-in-memory
+(without need to distribute and guarantee execution)
+Complications:
+~exactly-once delivery
+~deliver order
+~persistence of data
+~transactional queues
+broker clusters:
+~no single point of failure
+~how clients connect to clusters? hard-coded IPs, DNS round-robin, load-balancer
+-database-based
+~application node- store in a table
+~batch processor - reads the table
+
+ZeroMQ:
+a library allows both broker and brokerless
+
+Synchronous calls(同步)
+-have multiple applications to integrate
+-need background processing
+-compile-time decouple
+
+serverless is one that costs you nothing to run if nobody using it, excluding data storage.
+best practice:
+-each function should do only one thing
+-functions don't call other functions(add data store and trigger)
+-use as few libraries in your function as possible
+-avoid using connection based services(manage service interface)
+-one function per route(if using HTTP)
+-learn to use messages and queues(decouple logic, learn to use circuit breaker, stops you building request-response)
+CQRS(Command Query Responsibility Segregation), basically read and write go through different logic
+-data flows not data lakes(Queues, functions, events)
+
+advantages of serverless:
+-more scale
+-elastic resources
+-faster speed and agility
+-reduced maintenance
+-better availability and fault tolerance
+
+common use cases:
+web applications, backends(mobile, Apps&services), data processing(real time, mapReduce, Batch)
+
+DevOps culture:
+-100% ownership(code,test,deploy,support), on call 24*7, incident reviews, honest and open feedback
+
+easy ownership:
+~continuous deployment
+~data persistence
+
+Eda: cache
+ribbon: handle all of communication among services
+histories: isolate network faults and protect the application 
+ELB: elastic load balancing
+Atlas: largely dimensional time series data storage and data storage system for near real-time operational insight
+mogul: introspect their service and figure out what's going on and see how it's being impacted by dependence and dependency
+network calls downstream errors
+salam: to see independency chain
+cassandra: store data 
+
+~DevOps culture
+~easy ownership
+~insight
+~cloud thinking
+~remove surprise
+
+R.I.P your instances:
+-stateless applications
+-high data spread and redundancy
+-production failure injection
+
+cloud guarantees:
+-your instance will die
+-you will share resources
+-the architecture will change
+
+identity& access management
+preventive security control: one intended to thwart unwanted or unauthorized activity
+IAM does not provide authentication for your OS or application
+IAM roles: humans, AWS EC2 instances, custom code or other AWS services
+
+console: psd
+API, CLI, SDK: Access keys
+IAM policies: inline or managed, json-based statements
+inline:
+-enforce a strict 1-1 relationship between policy and principal
+-avoid the wrong policy being attached to a principal
+-ensure the policy is deleted when deleting the principal
+
+managed:
+-reusability
+-central change management
+-versioning and rollback
+-delegation of permissions management
+-larger policy size
+
+identity-based policies, the principal is implicit
+resource-based policies, the principal is explicit
+
+microservices architecture（structures the application as a set of loosely coupled, collaborating services）
+-application architecture(monolithic & microservice)
+-decomposition: decomposed by business capability and subdomain
+-deployment patterns
+multiple service instances per host
+service instance per host/container/vm
+serverless deployment
+service deployment platform
+-cross cutting concerns
+microservice chassis&externalized configuration(externalize all configuration such db location and credentials)
+-communication patterns
+~style(messaging, domain-specific protocol, remote procedure invocation(RPI))
+~external API(API gateway&backend for front-end)
+~service discovery(client-side discovery, server-side discovery, service registry, self registry and 3rd party registration)
+~reliability(circuit breaker)
+~transactional messaging
+~db management(db per service, shared db, saga, api composition, CQRS, event sourcing)
+~security: access token
+~testing: Consumer-driven contract test, Consumer-side contract test & Service components test
+~observability(log aggregation, audit logging, application metrics, distributed tracing, exception tracking)
+
+benefits:
+-Enables the continuous delivery and deployment of large, complex applications.
+-Each microservice is relatively small(easier for developers to understand, IDE is faster, application is faster to start)
+-improved fault isolation
+-Eliminates any long-term commitment to a technology stack
+
+drawbacks:
+-Developers must deal with the additional complexity of creating a distributed system
+-Deployment complexity
+-Increased memory consumption
+
+how to maintain data consistency?
+An application must instead use the Saga pattern. A service publishes an event when its data changes. Other services consume that event and 
+update their data.
+
+implementing queries that need to retrieve data owned by multiple services?
+The API Composition and Command Query Responsibility Segregation (CQRS) patterns.
