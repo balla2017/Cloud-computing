@@ -1,0 +1,90 @@
+github link:
+
+ELB URL:
+Studentinformationadminsystem-env.yjmypmnyth.us-east-2.elasticbeanstalk.com
+
+example bonus get call:
+Studentinformationadminsystem-env.yjmypmnyth.us-east-2.elasticbeanstalk.com/webapi/courses/0002
+
+Add course:
+post:
+Studentinformationadminsystem-env.yjmypmnyth.us-east-2.elasticbeanstalk.com/webapi/courses
+body:
+{
+"boradId": "555",
+"courseId": "0002",
+"department": "Seminars",
+"professorId": "Andrew.Ben",
+"boardId":"666"
+}
+this is will not produce record in Board and Registra.
+
+The solution is:
+1.create registra table in DynamoDB and new registra class;
+2.create related service and resource (such as add according to the id) to the service and source file;
+3.produce state machine workflow and register a state machine in the aws console;
+4.there are three lambda functions I wrote in this workflow.
+-newCourseDetection.(this is the entrance of the workflow)
+this function will be triggered as long as course table has update. So when this lambda function is connected with the course table and when the new record came in in json format,this lambda will work. It will use map.get("attribute").getS() to get different attributes inside the function and create a new course object to save into the database and update the database. It will also use the results to make sure if it is a new course.If three of attributes, boradid, listofstudents and notificationTopic are all empty or department is seminars, it will set the status attribute to be "false", or it will be set to "true".It will use the attribute to trigger next lambda function.In the end, this function will create a StartExecutionRequest and start the state machine with ARN code and a AWSStepFunctionsClientBuilder.
+
+-newRegistra.
+This function is triggered by newCourseDetection function.
+It will create a new Registra object according to the input course and add the new record to registra table.
+
+-newBoard
+This function is triggered by  newRegistra function.
+It will create a new Board object and update the boardid related to the course.The state machine will end there.
+
+my state machine code is:
+{
+  "Comment": "Create a state machine for registering a new course.",
+  "StartAt": "NewCourseDetection",
+  "States": {
+    "NewCourseDetection": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.status",
+          "StringEquals": "true",
+          "Next": "CreateNewRegister"
+        },
+        {
+          "Variable": "$.status",
+          "StringEquals": "false",
+          "Next": "Stop"
+        }
+      ]
+    },
+
+    "CreateNewRegister": {
+      "Type" : "Task",
+      "Resource": "arn:aws:lambda:us-east-2:267886740618:function:CreateNewRegister",
+      "Next": "CreateNewBoard"
+    },
+  
+    "CreateNewBoard": {
+      "Type" : "Task",
+      "Resource": "arn:aws:lambda:us-east-2:267886740618:function:CreatNewBoard",
+      "Next": "Stop"
+    },
+
+    "Stop": {
+      "Type": "Pass",
+      "End":true
+    }
+  }
+}
+
+I connect three lambda functions with course table and upload them to aws.
+
+Bonus:
+create http request and get object and save the in local. Do not treat dynamodb a table, just see the response as string file and get the data we want.
+
+It happens sometime the ELB does not work because the cloud watch told me that:
+there is 
+com.amazonaws.client.AwsSyncClientParams.getAdvancedConfig()Lcom/amazonaws/client/builder/AdvancedConfig;: java.lang.NoSuchMethodError 
+java.lang.NoSuchMethodError in this line:
+ AWSStepFunctions client2=AWSStepFunctionsClientBuilder.standard().withRegion("us-east-2").build();
+ in lambdafunction/newcoursedetection.java
+ 
+ Thank you so much!
